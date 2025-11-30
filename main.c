@@ -62,6 +62,20 @@ void adminTerminal()
 	cleanScreen();
 	loadingScreen();
 	cleanScreen();
+	
+	FILE *fp = fopen(DATA_FILE, "rb");
+	if (fp == NULL) {
+        printf("Error opening data file!\n");
+        return;
+    }
+	accountInformation temp_account;
+	printf("\x1b[1m\x1b[36mAccount List\x1b[0m\n");
+	
+	while (fread(&temp_account, sizeof(accountInformation), 1, fp) == 1) {
+        printf("Name: %s, Surname: %s, Password: %s\n", 
+               temp_account.account_name, temp_account.account_surname, temp_account.account_password);
+    }
+	fclose(fp);
 }
 
 void createAccount()
@@ -70,10 +84,10 @@ void createAccount()
     loadingScreen();
     cleanScreen();
     
-    // Kullanacaðýmýz hesabý oluþtur
+    // Kullanaca??m?z hesab? olu?tur
     accountInformation new_account;
     
-    // Kullanýcýdan bilgileri al
+    // Kullan?c?dan bilgileri al
     printf("\x1b[1m\x1b[35mAccount Creation Screen\x1b[0m\n");
     printf("\x1b[33mWARNING: \x1b[0mPlease use only English characters!\n");
     
@@ -89,18 +103,18 @@ void createAccount()
     fgets(new_account.account_password, MAX_LENGTH, stdin);
     newLineClear(new_account.account_password);
 
-    // TODO: Bakiye ve hesap numarasý da burada atanabilir
+    // TODO: Bakiye ve hesap numarasi da burada atanabilir
     new_account.account_balance = 0.0; 
-    // new_account.account_num = ... (Bunu oluþturmak için ayrý bir mantýk gerekir)
+    // new_account.account_num = ... (Bunu olusturmak icin ayri bir mantik gerekir)
 
-    // Dosyayý "append binary" (ikili ekle) modunda aç
+    // Dosyayi "append binary" (ikili ekle) modunda ac
     FILE *fp = fopen(DATA_FILE, "ab"); 
     if (fp == NULL) {
         printf("Error opening data file!\n");
         return;
     }
 
-    // fprintf yerine struct'ýn tamamýný dosyaya yaz
+    // fprintf yerine struct'in tamamini dosyaya yaz
     fwrite(&new_account, sizeof(accountInformation), 1, fp);
     
     fclose(fp);
