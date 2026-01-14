@@ -70,6 +70,31 @@ void adminTerminal()
 	cleanScreen();
 	loadingScreen();
 	cleanScreen();
+	printf("\x1b[1m\x1b[35mAdmin Log In Screen\x1b[0m\n");
+	
+    char admin_password[MAX_LENGTH];
+    
+    int admin_login_success = 0;
+    
+    do
+    {
+	
+	    printf("Please enter admin password: ");
+	    fgets(admin_password, MAX_LENGTH, stdin);newLineClear(admin_password);
+    	if(strcmp(admin_password, "111111") == 0)
+		{
+			admin_login_success = 1;
+			break;
+		}
+		else
+		{
+			printf("\x1b[1m\x1b[31mERROR: \x1b[0mWrong credentials\n");
+			admin_login_success = 0;
+		}
+	}while(admin_login_success==0);
+	
+	cleanScreen();
+	loadingScreen();
 	
 	FILE *fp = fopen(DATA_FILE, "rb");
 	if (fp == NULL) {
@@ -85,6 +110,7 @@ void adminTerminal()
     }
 	fclose(fp);
 	printf("\nPress any key to return to the main menu: ");
+	admin_login_success = 0;
 	getch();
 	firstIntroduction();
 	
