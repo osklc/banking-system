@@ -22,26 +22,18 @@ void firstIntroduction();
 
 typedef struct
 {
-	int account_num;
 	char account_name[MAX_LENGTH];
 	char account_surname[MAX_LENGTH];
 	char account_password[MAX_LENGTH];
+	char account_code[MAX_LENGTH];
 	float account_balance;
 } accountInformation;
-
-//Random account code
-const char alphabet_numbers[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"};
-char randomStr[6];
-//srand(time(NULL));
 
 int main() 
 {
 	firstIntroduction();
-	
-	
 	return 0;
 }
-
 
 void gotoxy(int x,int y)
 {
@@ -49,15 +41,6 @@ void gotoxy(int x,int y)
 	coord.X = x;
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
-
-void newLineClear(char *str)
-{
-    size_t len = strlen(str);
-    if (len > 0 && str[len-1] == '\n') {
-        str[len-1] = '\0';
-    }
 }
 
 void cleanScreen()
@@ -97,10 +80,18 @@ void adminTerminal()
 	printf("\x1b[1m\x1b[36mAccount List\x1b[0m\n");
 	
 	while (fread(&temp_account, sizeof(accountInformation), 1, fp) == 1) {
-        printf("Name: %s, Surname: %s, Password: %s\n", 
-               temp_account.account_name, temp_account.account_surname, temp_account.account_password);
+        printf("Name: %s, Surname: %s, Password: %s, AccountCode: %s\n", 
+               temp_account.account_name, temp_account.account_surname, temp_account.account_password, temp_account.account_code);
     }
 	fclose(fp);
+}
+
+void newLineClear(char *str)
+{
+    size_t len = strlen(str);
+    if (len > 0 && str[len-1] == '\n') {
+        str[len-1] = '\0';
+    }
 }
 
 void createAccount()
@@ -109,10 +100,8 @@ void createAccount()
     loadingScreen();
     cleanScreen();
     
-    // Kullanaca??m?z hesab? olu?tur
     accountInformation new_account;
     
-    // Kullan?c?dan bilgileri al
     printf("\x1b[1m\x1b[35mAccount Creation Screen\x1b[0m\n");
     printf("\x1b[33mWARNING: \x1b[0mPlease use only English characters!\n");
     
@@ -127,19 +116,33 @@ void createAccount()
     printf("Please create a password: ");
     fgets(new_account.account_password, MAX_LENGTH, stdin);
     newLineClear(new_account.account_password);
-
-    // TODO: Bakiye ve hesap numarasi da burada atanabilir
+    
+    
+    int i;
+	const char alphabet_numbers[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"};
+	char randomStr[7];
+	
+	srand(time(NULL));
+	
+	for(i=0;i<6;i++)
+	{
+		int index = rand() % (sizeof(alphabet_numbers)-1);
+		randomStr[i] = alphabet_numbers[index];
+	}
+	
+	randomStr[6] = '\0';
+    
+    strcpy(new_account.account_code, randomStr);
+    
+    
     new_account.account_balance = 0.0; 
-    // new_account.account_num = ... (Bunu olusturmak icin ayri bir mantik gerekir)
 
-    // Dosyayi "append binary" (ikili ekle) modunda ac
-    FILE *fp = fopen(DATA_FILE, "ab"); 
+    FILE *fp = fopen(DATA_FILE, "ab");
     if (fp == NULL) {
         printf("Error opening data file!\n");
         return;
     }
 
-    // fprintf yerine struct'in tamamini dosyaya yaz
     fwrite(&new_account, sizeof(accountInformation), 1, fp);
     
     fclose(fp);
