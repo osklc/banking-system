@@ -103,6 +103,7 @@ void createAccount()
 	const char numbers[] = {"0123456789"};
 	int j;
 	int wrongPasswordCounter;
+	int passwordLong;
     cleanScreen();
     loadingScreen();
     cleanScreen();
@@ -126,21 +127,23 @@ void createAccount()
     do
     {
     	wrongPasswordCounter=0;
+    	passwordLong=0;
     	printf("Please create a password: ");
 	    fgets(new_account.account_password, MAX_LENGTH, stdin);
 	    newLineClear(new_account.account_password);
 	    for(j=0;new_account.account_password[j] != '\0';j++)
 	    {
+	    	passwordLong++;
 	    	if(strchr(numbers, new_account.account_password[j]) == NULL)
 	    	{
 	    		wrongPasswordCounter++;
 			}
 		}
-		if(wrongPasswordCounter>0)
+		if(wrongPasswordCounter>0 || passwordLong !=6)
 		{
-			printf("\x1b[1m\x1b[31mERROR: \x1b[0mPlease enter only numbers!\n");
+			printf("\x1b[1m\x1b[31mERROR: \x1b[0mPassword must be 6 characters long and consist only of numbers!\n");
 		}
-	} while(wrongPasswordCounter>0);
+	} while(wrongPasswordCounter>0 || passwordLong !=6);
     
     
     int i;
@@ -259,7 +262,8 @@ void firstIntroduction()
 	{
 		cleanScreen();
 		printf("\x1b[1m\x1b[31mERROR: \x1b[0mPlease enter a valid value!\n");
-		sleep(2);
+		printf("\nPress any key to return to the main menu: ");
+		getch();
 		firstIntroduction();
 	}
 	
