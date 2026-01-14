@@ -84,6 +84,10 @@ void adminTerminal()
                temp_account.account_name, temp_account.account_surname, temp_account.account_password, temp_account.account_code);
     }
 	fclose(fp);
+	printf("\nPress any key to return to the main menu: ");
+	getch();
+	firstIntroduction();
+	
 }
 
 void newLineClear(char *str)
@@ -221,17 +225,16 @@ void firstIntroduction()
 	loadingScreen();
 	cleanScreen();
 	
-	char selected_menu[MAX_LENGTH];
-	printf("\x1b[1m\x1b[32mBank Transactions Terminal\x1b[0m\n");
+	char selected_menu;
+	printf("\x1b[1m\x1b[32mBanking Terminal\x1b[0m\n");
 	printf("1-Create a New Account\n");
 	printf("2-Log In to Your Account\n");
 	printf("3-Login to The Administrator Terminal\n");
 	printf("q-Quit\n");
-	printf("Please select a menu: ");
-	fgets(selected_menu, MAX_LENGTH, stdin);
-	selected_menu[strcspn(selected_menu, "\n")] = '\0';
-	
-	if (strcmp(selected_menu,"1") != 0 && strcasecmp(selected_menu,"2") != 0 && strcasecmp(selected_menu,"3") != 0 && strcasecmp(selected_menu,"q") != 0)
+	printf("\nPlease select a menu: ");
+	selected_menu = getch();
+		
+	if (selected_menu != '1' && selected_menu !='2' && selected_menu !='3' && selected_menu !='q')
 	{
 		cleanScreen();
 		printf("\x1b[1m\x1b[31mERROR: \x1b[0mPlease enter a valid value!\n");
@@ -239,21 +242,21 @@ void firstIntroduction()
 		firstIntroduction();
 	}
 	
-	else if (strcmp(selected_menu,"1")==0)
+	else if (selected_menu == '1')
 	{
 		createAccount();
 	}
 	
-	else if (strcmp(selected_menu,"2")==0)
+	else if (selected_menu == '2')
 	{
 		loginAccount();
 	}
 	
-	else if (strcmp(selected_menu,"3")==0)
+	else if (selected_menu == '3')
 	{
 		adminTerminal();
 	}
-	else if (strcmp(selected_menu,"q")==0)
+	else if (selected_menu == 'q')
 	{
 		return;
 	}
