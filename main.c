@@ -8,7 +8,7 @@
 
 #define DEFAULT_TERMINAL_WIDTH 120
 #define MAX_LENGTH 128
-#define DATA_FILE "account-information.txt"
+#define DATA_FILE "account-information.dat"
 
 // Function prototype
 void gotoxy(int x,int y);
