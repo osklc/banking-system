@@ -100,6 +100,9 @@ void newLineClear(char *str)
 
 void createAccount()
 {
+	const char numbers[] = {"0123456789"};
+	int j;
+	int wrongPasswordCounter;
     cleanScreen();
     loadingScreen();
     cleanScreen();
@@ -112,14 +115,32 @@ void createAccount()
     printf("Please enter your name: ");
     fgets(new_account.account_name, MAX_LENGTH, stdin);
     newLineClear(new_account.account_name);
+    //first upper
+    new_account.account_name[0]=toupper(new_account.account_name[0]);
     
     printf("Please enter your surname: ");   
     fgets(new_account.account_surname, MAX_LENGTH, stdin);
     newLineClear(new_account.account_surname);
-    
-    printf("Please create a password: ");
-    fgets(new_account.account_password, MAX_LENGTH, stdin);
-    newLineClear(new_account.account_password);
+    //first upper
+    new_account.account_surname[0]=toupper(new_account.account_surname[0]);
+    do
+    {
+    	wrongPasswordCounter=0;
+    	printf("Please create a password: ");
+	    fgets(new_account.account_password, MAX_LENGTH, stdin);
+	    newLineClear(new_account.account_password);
+	    for(j=0;new_account.account_password[j] != '\0';j++)
+	    {
+	    	if(strchr(numbers, new_account.account_password[j]) == NULL)
+	    	{
+	    		wrongPasswordCounter++;
+			}
+		}
+		if(wrongPasswordCounter>0)
+		{
+			printf("\x1b[1m\x1b[31mERROR: \x1b[0mPlease enter only numbers!\n");
+		}
+	} while(wrongPasswordCounter>0);
     
     
     int i;
@@ -143,7 +164,7 @@ void createAccount()
 
     FILE *fp = fopen(DATA_FILE, "ab");
     if (fp == NULL) {
-        printf("Error opening data file!\n");
+        printf("\x1b[1m\x1b[31mERROR: \x1b[0mopening data file!\n");
         return;
     }
 
