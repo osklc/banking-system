@@ -4,10 +4,21 @@
 #include <process.h>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 
 #define DEFAULT_TERMINAL_WIDTH 120
 #define MAX_LENGTH 128
 #define DATA_FILE "account-information.txt"
+
+// Function prototype
+void gotoxy(int x,int y);
+void newLineClear(char *str);
+void cleanScreen();
+int loadingScreen();
+void adminTerminal();
+void createAccount();
+void loginAccount();
+void firstIntroduction();
 
 typedef struct
 {
@@ -17,6 +28,20 @@ typedef struct
 	char account_password[MAX_LENGTH];
 	float account_balance;
 } accountInformation;
+
+//Random account code
+const char alphabet_numbers[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"};
+char randomStr[6];
+//srand(time(NULL));
+
+int main() 
+{
+	firstIntroduction();
+	
+	
+	return 0;
+}
+
 
 void gotoxy(int x,int y)
 {
@@ -37,7 +62,7 @@ void newLineClear(char *str)
 
 void cleanScreen()
 {
-	printf("\033[3J\033[H\033[2J");
+	system("cls");
     fflush(stdout);
 }
 
@@ -231,10 +256,3 @@ void firstIntroduction()
 	}
 }
 
-int main() 
-{
-	firstIntroduction();
-	
-	
-	return 0;
-}
